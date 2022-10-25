@@ -1,5 +1,7 @@
 {
 	"compilerOptions": {
+		"jsx": "react-jsx",
+		"jsxImportSource": "preact",
 		"target": "ES2016",
 		"module": "commonjs",
 		"skipLibCheck": true,
