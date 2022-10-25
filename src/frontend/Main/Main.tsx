@@ -1,0 +1,1 @@
+export const Main = () => (<div>My Main Application here will be router</div>)
