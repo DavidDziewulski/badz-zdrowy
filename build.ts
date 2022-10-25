@@ -5,7 +5,4 @@ build({
 	bundle: true,
 	outfile: './public/main.js',
 	watch: true,
-	loader: {
-		".js": "jsx",
-	},
 }).catch(() => process.exit(1))
