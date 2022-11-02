@@ -5,4 +5,5 @@ build({
 	bundle: true,
 	outfile: './public/main.js',
 	watch: true,
+	sourcemap: 'both',
 }).catch(() => process.exit(1))
