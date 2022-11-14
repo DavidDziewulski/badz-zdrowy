@@ -1,1 +1,0 @@
-export * as hook from './hooks'

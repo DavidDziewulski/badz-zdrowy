@@ -16,6 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm:start-*\"",
     "start-frontend": "tsx build.ts",
+    "start-frontend-css": "npx tailwindcss -i ./src/frontend/index.css -o ./public/index.css --minify --watch",
     "start-backend": "nodemon ./src/backend/index.ts"
   },
   "repository": {
@@ -35,6 +36,7 @@
     "mobx-react": "7.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-router-dom": "^6.4.3",
     "tsx": "3.10.1"
   },
   "devDependencies": {
