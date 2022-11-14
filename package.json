@@ -37,6 +37,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "^6.4.3",
+    "sqlite": "4.1.2",
     "tsx": "3.10.1"
   },
   "devDependencies": {
