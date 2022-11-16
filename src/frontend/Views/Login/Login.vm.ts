@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 export class LoginVm {
 	email = '';
@@ -13,6 +13,25 @@ export class LoginVm {
 
 	constructor() {
 		makeAutoObservable(this);
+	}
+
+	mount = async () => {
+		const { result } = await fetch(`http://localhost:3000/employees/10`)
+			.then(data => data.json())
+			.catch((error) => {
+				console.error('Error:', error);
+				return;
+			});
+
+		if (!result) {
+			return;
+		}
+
+		console.log(result)
+
+		runInAction(() => {
+			this.email = result.title;
+		})
 	}
 
 	setEmail = (value: string) => {
