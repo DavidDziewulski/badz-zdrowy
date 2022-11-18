@@ -1,11 +1,17 @@
 import { observer } from "mobx-react";
 import { Link } from "react-router-dom";
+import { SweetAlertIcon } from "sweetalert2";
 import { ErrorMessage } from "../../components";
 import { hook } from "../../utils";
 import { RegisterVm } from "./Register.vm";
 
 export const Register = observer(() => {
-	const vm = hook.useVm(() => new RegisterVm());
+	const vm = hook.useVm(() => new RegisterVm((title: string, icon: SweetAlertIcon) => {
+		hook.useAlert().fire({
+			title: <p>{title}</p>,
+			icon,
+		})
+	}));
 
 	const nameError = vm.error.userName && vm.isTrySave && (
 		<ErrorMessage message="Proszę podać poprawnę imię" />
@@ -24,7 +30,7 @@ export const Register = observer(() => {
 	)
 
 	return (
-		<section className="bg-gray-50 dark:bg-gray-900">
+		<section className="bg-gray-50 dark:bg-gray-900 h-screen">
 			<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
 				<a
 					href="#"
@@ -124,7 +130,7 @@ export const Register = observer(() => {
 							<button
 								type="submit"
 								className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-								Stwórz kontot
+								Stwórz konto
 							</button>
 							<p className="text-sm font-light text-gray-500 dark:text-gray-400">
 								Masz już konto?

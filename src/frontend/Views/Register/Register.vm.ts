@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+import { SweetAlertIcon } from 'sweetalert2';
 import { utils } from '../../utils';
 
 export class RegisterVm {
@@ -21,7 +22,7 @@ export class RegisterVm {
 
 	isTrySave = false;
 
-	constructor() {
+	constructor(private onMsg: (title: string, icon: SweetAlertIcon) => void) {
 		makeAutoObservable(this);
 	}
 
@@ -61,18 +62,58 @@ export class RegisterVm {
 	save = (e: React.SyntheticEvent) => {
 		e.preventDefault();
 
+		if (this.isSaving) {
+			return;
+		};
+
 		this.isTrySave = true;
 
 		if (this.test()) {
 			return;
 		}
 
-		if (this.isSaving) {
-			return;
-		};
-
 		this.isSaving = true;
 
-		this.isSaving = false;
-	};
+
+		(async () => {
+			const data = await fetch('user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					email: this.email,
+					name: this.userName,
+					password: this.password,
+				}),
+			})
+
+			this.isSaving = false;
+
+			if (!data.ok) {
+				this.onMsg('Podany adress email jest już wykorzystany', 'error');
+				return;
+			}
+
+			const emailData = await fetch('email', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					to: this.email,
+					subject: 'Rejestracja na stronie Badz-Zdrowy',
+					text: '',
+					html: `<a>Kliknij w link</a>`
+				}),
+			})
+
+			if (!emailData.ok) {
+				this.onMsg('Błąd podczas wysyłania wiadomości na adres email', 'error');
+				return;
+			}
+
+			this.onMsg('Na podany adres email został wysłany link aktywacyjny', 'success');
+		})();
+	}
 }
