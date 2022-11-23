@@ -80,8 +80,6 @@ class UserController {
 				throw new Error("Nie ma takiego użytkownika")
 			}
 
-			console.log(await bcrypt.compare(req.body.password, result.dataValues.password));
-
 			if (!await bcrypt.compare(req.body.password, result.dataValues.password)) {
 				throw new Error("Niepoprawne hasło")
 			}

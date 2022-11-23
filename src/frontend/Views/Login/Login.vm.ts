@@ -1,8 +1,7 @@
-import { makeAutoObservable, runInAction, toJS } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { SweetAlertIcon } from 'sweetalert2';
-import { User } from '../../models';
-import { user } from '../../store/user';
 import { utils } from '../../utils';
+import { store } from '../../store';
 
 export class LoginVm {
 	email = '';
@@ -58,7 +57,7 @@ export class LoginVm {
 		}
 
 		(async () => {
-			const result = await user.login(
+			const result = await store.login(
 				this.email,
 				this.password,
 			);
@@ -68,11 +67,6 @@ export class LoginVm {
 				this.isSaving = false;
 				return;
 			}
-
-			window.localStorage.setItem('user1', JSON.stringify({
-				email: result.user.email,
-				name: result.user.name,
-			}));
 
 			this.isSaving = false;
 		}

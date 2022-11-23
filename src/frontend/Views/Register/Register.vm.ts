@@ -1,4 +1,4 @@
-import { user } from './../../store/user';
+import { store } from '../../store/store';
 import { makeAutoObservable } from 'mobx';
 import { SweetAlertIcon } from 'sweetalert2';
 import { utils } from '../../utils';
@@ -74,7 +74,7 @@ export class RegisterVm {
 
 		this.isSaving = true;
 		(async () => {
-			const result = await user.register(
+			const result = await store.register(
 				this.email,
 				this.userName,
 				this.password,
