@@ -1,4 +1,7 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable } from 'mobx';
+import { SweetAlertIcon } from 'sweetalert2';
+import { utils } from '../../utils';
+import { store } from '../../store';
 
 export class LoginVm {
 	email = '';
@@ -11,50 +14,62 @@ export class LoginVm {
 
 	isSaving = false;
 
-	constructor() {
+	error = {
+		email: true,
+		password: true,
+	}
+
+	isTrySave = false;
+
+	constructor(private onMsg: (title: string, icon: SweetAlertIcon, isError: boolean) => void) {
 		makeAutoObservable(this);
 	}
 
-	mount = async () => {
-		const { result } = await fetch(`http://localhost:3000/employees/10`)
-			.then(data => data.json())
-			.catch((error) => {
-				console.error('Error:', error);
-				return;
-			});
+	setEmail = (email: string) => {
+		this.email = email;
 
-		if (!result) {
-			return;
-		}
-
-		console.log(result)
-
-		runInAction(() => {
-			this.email = result.title;
-		})
-	}
-
-	setEmail = (value: string) => {
-		this.email = value;
+		this.error.email = !utils.emailValidation(email);
 	};
 
-	setPassword = (value: string) => {
-		this.password = value;
+	setPassword = (password: string) => {
+		this.password = password;
+
+		this.error.password = !utils.passwordValidation(password);
 	};
+
+	test = () => [
+		this.error.email,
+		this.error.password,
+	].includes(true);
 
 	save = (e: React.SyntheticEvent) => {
-		e.preventDefault();
-
 		if (this.isSaving) {
 			return;
 		}
 
+		e.preventDefault();
+
+		this.isTrySave = true;
 		this.isSaving = true;
 
-		this.emailErrorMessage = 'Nie znaleziono konta na podany adres email.'
+		if (this.test()) {
+			return;
+		}
 
-		this.passwordErrorMessage = 'Błędne hasło.'
+		(async () => {
+			const result = await store.login(
+				this.email,
+				this.password,
+			);
 
-		this.isSaving = false;
+			if (!result.ok) {
+				this.onMsg(`${result.msg}`, 'error', true);
+				this.isSaving = false;
+				return;
+			}
+
+			this.isSaving = false;
+		}
+		)()
 	}
 }

@@ -1,11 +1,20 @@
 import { observer } from "mobx-react";
 import { Link } from "react-router-dom";
+import { SweetAlertIcon } from "sweetalert2";
 import { ErrorMessage } from "../../components";
 import { hook } from "../../utils";
 import { LoginVm } from "./Login.vm";
 
 export const Login = observer(() => {
-	const vm = hook.useVm(() => new LoginVm());
+	const vm = hook.useVm(() => new LoginVm((
+		title: string,
+		icon: SweetAlertIcon,
+	) => {
+		hook.useAlert().fire({
+			title: <p>{title}</p>,
+			icon,
+		})
+	}));
 
 	return (
 		<section className="bg-gray-50 dark:bg-gray-900">
@@ -70,7 +79,7 @@ export const Login = observer(() => {
 							</button>
 							<p className="text-sm font-light text-gray-500 dark:text-gray-400">
 								Nie masz jeszcze konta?
-								<Link to='/' className="font-medium text-primary-600 hover:underline dark:text-primary-500" >
+								<Link to='/register' className="font-medium text-primary-600 hover:underline dark:text-primary-500" >
 									Zarejestruj się
 								</Link>
 

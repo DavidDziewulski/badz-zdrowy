@@ -1,4 +1,6 @@
+import { store } from '../../store/store';
 import { makeAutoObservable } from 'mobx';
+import { SweetAlertIcon } from 'sweetalert2';
 import { utils } from '../../utils';
 
 export class RegisterVm {
@@ -21,7 +23,7 @@ export class RegisterVm {
 
 	isTrySave = false;
 
-	constructor() {
+	constructor(private onMsg: (title: string, icon: SweetAlertIcon, isError: boolean) => void) {
 		makeAutoObservable(this);
 	}
 
@@ -57,8 +59,11 @@ export class RegisterVm {
 		this.error.accept,
 	].includes(true);
 
-
 	save = (e: React.SyntheticEvent) => {
+		if (this.isSaving) {
+			return;
+		};
+
 		e.preventDefault();
 
 		this.isTrySave = true;
@@ -67,12 +72,22 @@ export class RegisterVm {
 			return;
 		}
 
-		if (this.isSaving) {
-			return;
-		};
-
 		this.isSaving = true;
+		(async () => {
+			const result = await store.register(
+				this.email,
+				this.userName,
+				this.password,
+			);
 
-		this.isSaving = false;
-	};
+			this.isSaving = false;
+
+			if (!result) {
+				this.onMsg(`Na podany adres został już wysłany link aktywacyjyn, proszę sprawdź email bądź załóż konto na inny adres email`, 'error', true);
+				return;
+			};
+
+			this.onMsg('Na podany adres email został wysłany link aktywacyjny', 'success', false);
+		})();
+	}
 }
