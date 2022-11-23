@@ -1,4 +1,8 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
+import { SweetAlertIcon } from 'sweetalert2';
+import { User } from '../../models';
+import { user } from '../../store/user';
+import { utils } from '../../utils';
 
 export class LoginVm {
 	email = '';
@@ -11,31 +15,67 @@ export class LoginVm {
 
 	isSaving = false;
 
-	constructor() {
+	error = {
+		email: true,
+		password: true,
+	}
+
+	isTrySave = false;
+
+	constructor(private onMsg: (title: string, icon: SweetAlertIcon, isError: boolean) => void) {
 		makeAutoObservable(this);
 	}
 
-	setEmail = (value: string) => {
-		this.email = value;
+	setEmail = (email: string) => {
+		this.email = email;
+
+		this.error.email = !utils.emailValidation(email);
 	};
 
-	setPassword = (value: string) => {
-		this.password = value;
+	setPassword = (password: string) => {
+		this.password = password;
+
+		this.error.password = !utils.passwordValidation(password);
 	};
+
+	test = () => [
+		this.error.email,
+		this.error.password,
+	].includes(true);
 
 	save = (e: React.SyntheticEvent) => {
-		e.preventDefault();
-
 		if (this.isSaving) {
 			return;
 		}
 
+		e.preventDefault();
+
+		this.isTrySave = true;
 		this.isSaving = true;
 
-		this.emailErrorMessage = 'Nie znaleziono konta na podany adres email.'
+		if (this.test()) {
+			return;
+		}
 
-		this.passwordErrorMessage = 'Błędne hasło.'
+		(async () => {
+			const result = await user.login(
+				this.email,
+				this.password,
+			);
 
-		this.isSaving = false;
+			if (!result.ok) {
+				this.onMsg(`${result.msg}`, 'error', true);
+				this.isSaving = false;
+				return;
+			}
+
+			window.localStorage.setItem('user1', JSON.stringify({
+				email: result.user.email,
+				name: result.user.name,
+			}));
+
+			this.isSaving = false;
+		}
+		)()
 	}
 }

@@ -7,12 +7,15 @@ type UserModel = {
 	email: string;
 	name: string;
 	password: string;
+	isActive: boolean;
+	tokenId: string;
 }
 
 export class User extends Model<UserModel> { }
 
-const hasPassword = async (user: User) => {
-	user.dataValues.password = await bcrypt.hash(user.dataValues.password, 8);
+const hashPassword = async (user: User) => {
+	user.dataValues.password = await bcrypt
+		.hash(user.dataValues.password, 8);
 }
 
 User.init(
@@ -35,10 +38,19 @@ User.init(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
+		isActive: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+		},
+		tokenId: {
+			type: DataTypes.UUIDV4,
+			unique: true,
+			allowNull: true,
+		},
 	},
 	{
 		hooks: {
-			beforeSave: hasPassword,
+			beforeSave: hashPassword,
 		},
 		sequelize: db,
 		tableName: 'users',

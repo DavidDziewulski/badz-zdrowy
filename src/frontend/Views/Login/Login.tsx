@@ -1,11 +1,20 @@
 import { observer } from "mobx-react";
 import { Link } from "react-router-dom";
+import { SweetAlertIcon } from "sweetalert2";
 import { ErrorMessage } from "../../components";
 import { hook } from "../../utils";
 import { LoginVm } from "./Login.vm";
 
 export const Login = observer(() => {
-	const vm = hook.useVm(() => new LoginVm());
+	const vm = hook.useVm(() => new LoginVm((
+		title: string,
+		icon: SweetAlertIcon,
+	) => {
+		hook.useAlert().fire({
+			title: <p>{title}</p>,
+			icon,
+		})
+	}));
 
 	return (
 		<section className="bg-gray-50 dark:bg-gray-900">
@@ -64,6 +73,7 @@ export const Login = observer(() => {
 								<ErrorMessage message={vm.passwordErrorMessage} />
 							</div>
 							<button
+								onClick={vm.login}
 								type="submit"
 								className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
 								Zaloguj

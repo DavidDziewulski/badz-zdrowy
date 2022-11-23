@@ -1,17 +1,30 @@
 import { observer } from "mobx-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SweetAlertIcon } from "sweetalert2";
 import { ErrorMessage } from "../../components";
 import { hook } from "../../utils";
 import { RegisterVm } from "./Register.vm";
 
 export const Register = observer(() => {
-	const vm = hook.useVm(() => new RegisterVm((title: string, icon: SweetAlertIcon) => {
+	const navigate = useNavigate();
+
+	const vm = hook.useVm(() => new RegisterVm((
+		title: string,
+		icon: SweetAlertIcon,
+		isError: boolean
+	) => {
 		hook.useAlert().fire({
 			title: <p>{title}</p>,
 			icon,
+		}).then(() => {
+			if (isError) {
+				return;
+			}
+
+			navigate('/log-in')
 		})
 	}));
+
 
 	const nameError = vm.error.userName && vm.isTrySave && (
 		<ErrorMessage message="Proszę podać poprawnę imię" />

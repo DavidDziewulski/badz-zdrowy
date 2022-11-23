@@ -1,4 +1,3 @@
-import { userEmail } from './../controlers/userEmail';
 import express from 'express';
 import { hook } from '../../frontend/utils';
 import { userController } from '../controlers';
@@ -10,13 +9,19 @@ router.post(
 	'/user',
 	userValidator.checkCreateUser(),
 	hook.useMiddleware,
-	userController.create
+	userController.create,
 );
 
-router.post(
-	'/email',
+router.get(
+	'/confirm',
 	hook.useMiddleware,
-	userEmail.create
-);
+	userController.verify,
+)
+
+router.post(
+	'/log-in',
+	hook.useMiddleware,
+	userController.logIn,
+)
 
 export default router;

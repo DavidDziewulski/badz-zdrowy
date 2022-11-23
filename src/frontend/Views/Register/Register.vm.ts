@@ -1,3 +1,4 @@
+import { user } from './../../store/user';
 import { makeAutoObservable } from 'mobx';
 import { SweetAlertIcon } from 'sweetalert2';
 import { utils } from '../../utils';
@@ -22,7 +23,7 @@ export class RegisterVm {
 
 	isTrySave = false;
 
-	constructor(private onMsg: (title: string, icon: SweetAlertIcon) => void) {
+	constructor(private onMsg: (title: string, icon: SweetAlertIcon, isError: boolean) => void) {
 		makeAutoObservable(this);
 	}
 
@@ -58,13 +59,12 @@ export class RegisterVm {
 		this.error.accept,
 	].includes(true);
 
-
 	save = (e: React.SyntheticEvent) => {
-		e.preventDefault();
-
 		if (this.isSaving) {
 			return;
 		};
+
+		e.preventDefault();
 
 		this.isTrySave = true;
 
@@ -73,47 +73,21 @@ export class RegisterVm {
 		}
 
 		this.isSaving = true;
-
-
 		(async () => {
-			const data = await fetch('user', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					email: this.email,
-					name: this.userName,
-					password: this.password,
-				}),
-			})
+			const result = await user.register(
+				this.email,
+				this.userName,
+				this.password,
+			);
 
 			this.isSaving = false;
 
-			if (!data.ok) {
-				this.onMsg('Podany adress email jest już wykorzystany', 'error');
+			if (!result) {
+				this.onMsg(`Na podany adres został już wysłany link aktywacyjyn, proszę sprawdź email bądź załóż konto na inny adres email`, 'error', true);
 				return;
-			}
+			};
 
-			const emailData = await fetch('email', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					to: this.email,
-					subject: 'Rejestracja na stronie Badz-Zdrowy',
-					text: '',
-					html: `<a>Kliknij w link</a>`
-				}),
-			})
-
-			if (!emailData.ok) {
-				this.onMsg('Błąd podczas wysyłania wiadomości na adres email', 'error');
-				return;
-			}
-
-			this.onMsg('Na podany adres email został wysłany link aktywacyjny', 'success');
+			this.onMsg('Na podany adres email został wysłany link aktywacyjny', 'success', false);
 		})();
 	}
 }
