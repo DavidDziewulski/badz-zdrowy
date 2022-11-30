@@ -16,6 +16,14 @@ export const Login = observer(() => {
 		})
 	}));
 
+	const emailError = vm.error.email && vm.isTrySave && (
+		<ErrorMessage message="Proszę wpisać poprwany adres email. Przykładowy email: nazwa@gmail.com" />
+	)
+
+	const passwordError = vm.error.password && vm.isTrySave && (
+		<ErrorMessage message="Proszę wpisać poprawne hasło.Hasło powinno zawierać od 6 do 20 znaków oraz dużą literę i cyfrę." />
+	)
+
 	return (
 		<section className="bg-gray-50 dark:bg-gray-900">
 			<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -52,7 +60,7 @@ export const Login = observer(() => {
 									value={vm.email}
 									onChange={e => vm.setEmail(e.target.value)}
 								/>
-								<ErrorMessage message={vm.emailErrorMessage} />
+								{emailError}
 							</div>
 							<div>
 								<label
@@ -70,7 +78,7 @@ export const Login = observer(() => {
 									value={vm.password}
 									onChange={e => vm.setPassword(e.target.value)}
 								/>
-								<ErrorMessage message={vm.passwordErrorMessage} />
+								{passwordError}
 							</div>
 							<button
 								type="submit"

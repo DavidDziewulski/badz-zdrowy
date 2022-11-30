@@ -1,13 +1,11 @@
-import { Router } from "./Router";
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from "react-router-dom";
+import { RouterProvider } from 'react-router-dom';
+import { router } from './Router';
 
 const $documentBody = document.getElementById('app');
 
 if ($documentBody) {
 	createRoot($documentBody).render(
-		<BrowserRouter>
-			<Router />
-		</BrowserRouter>
+		<RouterProvider router={router} />
 	)
 };

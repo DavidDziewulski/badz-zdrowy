@@ -50,12 +50,12 @@ export class LoginVm {
 		e.preventDefault();
 
 		this.isTrySave = true;
-		this.isSaving = true;
 
 		if (this.test()) {
 			return;
 		}
 
+		this.isSaving = true;
 		(async () => {
 			const result = await store.login(
 				this.email,
@@ -63,8 +63,18 @@ export class LoginVm {
 			);
 
 			if (!result.ok) {
-				this.onMsg(`${result.msg}`, 'error', true);
+				if (result.msg) {
+					this.onMsg(`${result.msg}`, 'error', true);
+
+					this.isSaving = false;
+
+					return;
+				}
+
+				this.onMsg(`${result.errors[0].msg}`, 'error', true);
+
 				this.isSaving = false;
+
 				return;
 			}
 

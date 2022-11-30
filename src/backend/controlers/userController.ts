@@ -39,7 +39,6 @@ class UserController {
 			if (res.statusCode)
 				return res.json({ msg: 'Successfully create user', ok: true })
 		} catch (e) {
-			console.log(e);
 			return res.status(500).json({
 				msg: 'Error',
 				status: 500,
@@ -51,12 +50,15 @@ class UserController {
 
 	verify = async (req: Request, res: Response) => {
 		try {
-			console.log(req.query.id)
-
-			const result = await User.findOne({ where: { tokenId: (req.query.id as string) } })
+			const result = await User.findOne({
+				where: {
+					tokenId: (req.query.id as string)
+				}
+			})
 
 			if (!result.dataValues.isActive) {
-				await result.update({ isActive: true }).catch(e => console.log(e))
+				await result.update({ isActive: true })
+					.catch(e => e)
 			}
 
 			res.redirect('/log-in')
@@ -88,7 +90,7 @@ class UserController {
 				throw new Error("Konto nie jest aktywne, sprawdź email")
 			}
 
-			res.status(200).json({
+			return res.status(200).json({
 				msg: 'Okej',
 				ok: true,
 				user: {
@@ -97,19 +99,10 @@ class UserController {
 				}
 			});
 		} catch (e) {
-			if (e instanceof Error) {
-				return res.status(400).json({
-					msg: e.message,
-					ok: false,
-					status: 400,
-					route: '/log-in',
-				})
-			}
-
-			return res.status(500).json({
-				msg: "Error",
+			return res.status(400).json({
+				msg: e.message,
 				ok: false,
-				status: 500,
+				status: 400,
 				route: '/log-in',
 			})
 		}

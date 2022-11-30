@@ -20,6 +20,7 @@ router.get(
 
 router.post(
 	'/log-in',
+	userValidator.checkLoginUser(),
 	hook.useMiddleware,
 	userController.logIn,
 )

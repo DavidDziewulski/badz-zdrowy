@@ -46,7 +46,7 @@ class Store {
 
 			this.setUser(result.user.email, result.user.name)
 
-			return result
+			return result;
 		}).catch(e => e);
 	}
 
@@ -63,12 +63,10 @@ class Store {
 	}
 
 	logOut = () => {
-		console.log('dupa')
 		window.localStorage.removeItem('currentUser');
 
 		this.isActive = false;
 	}
-
 
 	setUser = (email: string, name: string) => {
 		window.localStorage.setItem('currentUser', JSON.stringify({
