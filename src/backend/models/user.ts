@@ -9,6 +9,7 @@ type UserModel = {
 	password: string;
 	isActive: boolean;
 	tokenId: string;
+	dietId: number;
 }
 
 export class User extends Model<UserModel> { }
@@ -47,6 +48,9 @@ User.init(
 			unique: true,
 			allowNull: true,
 		},
+		dietId: {
+			type: DataTypes.INTEGER,
+		}
 	},
 	{
 		hooks: {

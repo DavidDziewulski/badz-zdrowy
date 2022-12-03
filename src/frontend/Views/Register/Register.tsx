@@ -25,7 +25,6 @@ export const Register = observer(() => {
 		})
 	}));
 
-
 	const nameError = vm.error.userName && vm.isTrySave && (
 		<ErrorMessage message="Proszę podać poprawnę imię" />
 	)

@@ -20,29 +20,31 @@ class UserValidator {
 		return [
 			body('name')
 				.notEmpty()
-				.withMessage("The name value should be not empty"),
+				.withMessage("Nazwa nie może być pusta"),
 			body('email')
 				.notEmpty()
-				.withMessage("The email value should be not empty")
+				.withMessage("Email nie może być puste")
 				.isEmail()
-				.withMessage(`The email value is not correct'`),
+				.withMessage(`Email jest niepoprawny`),
 			body('password')
 				.notEmpty()
-				.withMessage("The password value should be not empty")
+				.withMessage("Hasło nie może być puste")
 				.isStrongPassword(strongPassword)
-				.withMessage("The password value should be have min 6 characters with one upper case and one number ")
+				.withMessage("Hasło musi składać się z minimum 6 znaków w tym jedna duża litera i jedna cyfra")
 		]
 	}
 	checkLoginUser() {
 		return [
-			body('name')
+			body('email')
 				.notEmpty()
-				.withMessage("The name value should be not empty"),
+				.withMessage("Email nie może być puste")
+				.isEmail()
+				.withMessage(`Email jest niepoprawny`),
 			body('password')
 				.notEmpty()
-				.withMessage("The password value should be not empty")
+				.withMessage("Hasło nie może być puste")
 				.isStrongPassword(strongPassword)
-				.withMessage("The password value should be have min 6 characters with one upper case and one number ")
+				.withMessage("Hasło musi składać się z minimum 6 znaków w tym jedna duża litera i jedna cyfra"),
 		]
 	}
 }

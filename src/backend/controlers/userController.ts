@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { createTransport } from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
 import { API_KEY } from '../../Global';
-import { User } from "../models";
+import { Diet, User } from "../models";
 
 class UserController {
 	public sendEmail = async (to: string, token: string) => {
@@ -13,7 +13,7 @@ class UserController {
 			subject: 'Rejestracja na poratlu Bądź Zdrowy',
 			text: 'text',
 			html: `<p>Klinkij
-						<a href="http://localhost:3000/confirm?id=${token}">
+						<a href="http://localhost:3000/api/confirm?id=${token}">
 							tutaj
 						</a> aby zatwierdzić konto
 				</p>`,
@@ -34,12 +34,11 @@ class UserController {
 
 			await this.sendEmail(req.body.email, token);
 
-			await User.create({ ...req.body, tokenId: token })
+			await User.create({ ...req.body, tokenId: token }) //here
 
 			if (res.statusCode)
 				return res.json({ msg: 'Successfully create user', ok: true })
 		} catch (e) {
-			console.log(e);
 			return res.status(500).json({
 				msg: 'Error',
 				status: 500,
@@ -51,12 +50,15 @@ class UserController {
 
 	verify = async (req: Request, res: Response) => {
 		try {
-			console.log(req.query.id)
-
-			const result = await User.findOne({ where: { tokenId: (req.query.id as string) } })
+			const result = await User.findOne({
+				where: {
+					tokenId: (req.query.id as string)
+				}
+			})
 
 			if (!result.dataValues.isActive) {
-				await result.update({ isActive: true }).catch(e => console.log(e))
+				await result.update({ isActive: true })
+					.catch(e => e)
 			}
 
 			res.redirect('/log-in')
@@ -66,6 +68,49 @@ class UserController {
 				status: 500,
 				route: '/user',
 				ok: false,
+			})
+		}
+	}
+
+	diet = async (req: Request, res: Response) => {
+		try {
+			const dietId = req.body.dietId;
+
+			const email = req.body.email;
+
+			const user = await User.findOne(({ where: { email } }))
+
+			const result = await Diet.findOne({ where: { id: dietId } });
+
+			if (!result) {
+				throw new Error("Nie ma takiej diety")
+			}
+
+			await user.update(
+				{
+					dietId,
+				},
+				{
+					where: { email: email },
+				}
+			);
+
+			return res.status(200).json({
+				msg: 'Okej',
+				ok: true,
+				diet: {
+					id: result.dataValues.id,
+					kcal: result.dataValues.kcal,
+					name: result.dataValues.name,
+					data: JSON.parse(result.dataValues.data),
+				}
+			});
+		} catch (e) {
+			return res.status(400).json({
+				msg: e.message,
+				ok: false,
+				status: 400,
+				route: '/diet',
 			})
 		}
 	}
@@ -88,28 +133,20 @@ class UserController {
 				throw new Error("Konto nie jest aktywne, sprawdź email")
 			}
 
-			res.status(200).json({
+			return res.status(200).json({
 				msg: 'Okej',
 				ok: true,
 				user: {
 					name: result.dataValues.name,
 					email,
+					dietId: result.dataValues.dietId,
 				}
 			});
 		} catch (e) {
-			if (e instanceof Error) {
-				return res.status(400).json({
-					msg: e.message,
-					ok: false,
-					status: 400,
-					route: '/log-in',
-				})
-			}
-
-			return res.status(500).json({
-				msg: "Error",
+			return res.status(400).json({
+				msg: e.message,
 				ok: false,
-				status: 500,
+				status: 400,
 				route: '/log-in',
 			})
 		}

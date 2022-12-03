@@ -74,7 +74,7 @@ export class RegisterVm {
 
 		this.isSaving = true;
 		(async () => {
-			const result = await store.register(
+			const result = await store.user.register(
 				this.email,
 				this.userName,
 				this.password,
