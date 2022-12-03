@@ -4,9 +4,9 @@ import { Layout } from "../partials";
 import { store } from "../store/store";
 import { Calculator, Diet, Home, Login, MentalHealth, NotFound, PhysicalHealth, Register } from "../Views";
 
-const IsNotLogi = observer(() => !store.isActive ? <Outlet /> : <Navigate to="/app/home" />)
+const IsNotLogi = observer(() => !store.user.isActive ? <Outlet /> : <Navigate to="/app/home" />)
 
-const IsLogin = observer(() => store.isActive ? <Layout /> : <Navigate to="/" />)
+const IsLogin = observer(() => store.user.isActive ? <Layout /> : <Navigate to="/" />)
 
 
 export const router = createBrowserRouter([

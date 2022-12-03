@@ -56,8 +56,9 @@ export class LoginVm {
 		}
 
 		this.isSaving = true;
+
 		(async () => {
-			const result = await store.login(
+			const result = await store.user.login(
 				this.email,
 				this.password,
 			);

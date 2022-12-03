@@ -3,7 +3,9 @@ import { db } from '../../../database.config';
 
 type DietModel = {
 	id: string;
-	kcl: number;
+	kcal: number;
+	name: string;
+	data: string;
 };
 
 export class Diet extends Model<DietModel> { };
@@ -15,8 +17,17 @@ Diet.init(
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		kcl: {
-			type: DataTypes.,
+		name: {
+			type: DataTypes.TEXT,
+			allowNull: false,
+		},
+		kcal: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+		},
+		data: {
+			type: DataTypes.TEXT,
+			allowNull: false,
 		},
 	},
 	{

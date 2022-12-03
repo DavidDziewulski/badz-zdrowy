@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { createTransport } from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
 import { API_KEY } from '../../Global';
-import { User } from "../models";
+import { Diet, User } from "../models";
 
 class UserController {
 	public sendEmail = async (to: string, token: string) => {
@@ -34,7 +34,7 @@ class UserController {
 
 			await this.sendEmail(req.body.email, token);
 
-			await User.create({ ...req.body, tokenId: token })
+			await User.create({ ...req.body, tokenId: token, dietId: 1 }) //here
 
 			if (res.statusCode)
 				return res.json({ msg: 'Successfully create user', ok: true })
@@ -72,6 +72,35 @@ class UserController {
 		}
 	}
 
+	diet = async (req: Request, res: Response) => {
+		try {
+			const dietId = req.body.dietId;
+
+			const result = await Diet.findOne({ where: { id: dietId } });
+
+			if (!result) {
+				throw new Error("Nie ma takiej diety")
+			}
+
+			return res.status(200).json({
+				msg: 'Okej',
+				ok: true,
+				diet: {
+					id: result.dataValues.id,
+					kcal: result.dataValues.kcal,
+					data: JSON.parse(result.dataValues.data),
+				}
+			});
+		} catch (e) {
+			return res.status(400).json({
+				msg: e.message,
+				ok: false,
+				status: 400,
+				route: '/diet',
+			})
+		}
+	}
+
 	logIn = async (req: Request, res: Response) => {
 		try {
 			const email = req.body.email;
@@ -96,6 +125,7 @@ class UserController {
 				user: {
 					name: result.dataValues.name,
 					email,
+					dietId: result.dataValues.dietId,
 				}
 			});
 		} catch (e) {

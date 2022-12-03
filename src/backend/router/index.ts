@@ -1,6 +1,6 @@
 import express from 'express';
 import { hook } from '../../frontend/utils';
-import { userController } from '../controlers';
+import { dietController, userController } from '../controlers';
 import { userValidator } from '../validators';
 
 const router = express.Router();
@@ -19,10 +19,22 @@ router.get(
 )
 
 router.post(
+	'/diet',
+	hook.useMiddleware,
+	userController.diet,
+)
+
+router.post(
 	'/log-in',
 	userValidator.checkLoginUser(),
 	hook.useMiddleware,
 	userController.logIn,
+)
+
+router.post(
+	'/app/diets',
+	hook.useMiddleware,
+	dietController.diet,
 )
 
 export default router;

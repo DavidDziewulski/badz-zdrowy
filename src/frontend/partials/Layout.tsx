@@ -33,7 +33,7 @@ export const Layout = observer(() => {
 										>
 											<span className="pr-2"><i className="em em-robot_face"></i>
 											</span>
-											Cześć, {store.name}
+											Cześć, {store.user.name}
 											<svg
 												className="h-3 fill-current inline"
 												xmlns="http://www.w3.org/2000/svg"
@@ -47,13 +47,9 @@ export const Layout = observer(() => {
 											id="myDropdown"
 											className={`dropdownlist absolute bg-gray-800 text-white right-0 left-0 p-3 overflow-auto z-30 ${vm.visible}`}
 										>
-											<a
-												href="#"
-												className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
-											><i className="fa fa-user fa-fw"></i>Profil</a>
 											<div className="border border-gray-800"></div>
 											<a
-												onClick={store.logOut}
+												onClick={store.user.logOut}
 												href="#"
 												className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
 											>
@@ -66,7 +62,7 @@ export const Layout = observer(() => {
 					</div>
 				</nav>
 			</header>
-			<aside className="w-64 flex" aria-label="Sidebar">
+			<aside className="flex" aria-label="Sidebar">
 				<div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
 					<ul className="space-y-2">
 						<li>

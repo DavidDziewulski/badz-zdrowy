@@ -13,6 +13,7 @@ export const Login = observer(() => {
 		hook.useAlert().fire({
 			title: <p>{title}</p>,
 			icon,
+			// https://stackoverflow.com/questions/57731302/reactjs-sweetalert2-put-input-above-html
 		})
 	}));
 
@@ -90,7 +91,6 @@ export const Login = observer(() => {
 								<Link to='/register' className="font-medium text-primary-600 hover:underline dark:text-primary-500" >
 									Zarejestruj się
 								</Link>
-
 							</p>
 						</form>
 					</div>
