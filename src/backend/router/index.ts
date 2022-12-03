@@ -1,6 +1,6 @@
 import express from 'express';
 import { hook } from '../../frontend/utils';
-import { dietController, userController } from '../controlers';
+import { dietController, userController, articleController } from '../controlers';
 import { userValidator } from '../validators';
 
 const router = express.Router();
@@ -16,6 +16,12 @@ router.get(
 	'/api/confirm',
 	hook.useMiddleware,
 	userController.verify,
+)
+
+router.get(
+	'/api/articles',
+	hook.useMiddleware,
+	articleController.articles,
 )
 
 router.post(
