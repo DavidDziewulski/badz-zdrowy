@@ -8,6 +8,10 @@ import { dietStatic } from './store';
 const initialValue = async () => {
 	const diet = JSON.stringify(dietStatic);
 
+	await Diet.create({ kcal: 1500, data: diet, name: 'Dieta 1500 kcal Wege' })
+	await Diet.create({ kcal: 1500, data: diet, name: 'Dieta 1500 kcal Normal' })
+	await Diet.create({ kcal: 1500, data: diet, name: 'Dieta 1500 kcal Sport' })
+
 	await Diet.create({ kcal: 2000, data: diet, name: 'Dieta 2000 kcal Wege' })
 	await Diet.create({ kcal: 2000, data: diet, name: 'Dieta 2000 kcal Normal' })
 	await Diet.create({ kcal: 2000, data: diet, name: 'Dieta 2000 kcal Sport' })
@@ -23,6 +27,10 @@ const initialValue = async () => {
 	await Diet.create({ kcal: 3500, data: diet, name: 'Dieta 3500 kcal Wege' })
 	await Diet.create({ kcal: 3500, data: diet, name: 'Dieta 3500 kcal Normal' })
 	await Diet.create({ kcal: 3500, data: diet, name: 'Dieta 3500 kcal Sport' })
+
+	await Diet.create({ kcal: 4000, data: diet, name: 'Dieta 4000 kcal Wege' })
+	await Diet.create({ kcal: 4000, data: diet, name: 'Dieta 4000 kcal Normal' })
+	await Diet.create({ kcal: 4000, data: diet, name: 'Dieta 4000 kcal Sport' })
 }
 
 const app = express();
@@ -39,6 +47,7 @@ db.sync().then(async () => {
 	}
 
 	await initialValue()
+
 	console.log('server is running on port' + port);
 }).catch(e => console.log(e))
 

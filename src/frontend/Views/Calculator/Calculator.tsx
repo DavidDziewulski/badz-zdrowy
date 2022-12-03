@@ -1,11 +1,29 @@
 import { observer } from "mobx-react";
+import { useNavigate } from "react-router-dom";
+import { SweetAlertIcon } from "sweetalert2";
 import { ErrorMessage } from "../../components";
 import { hook } from "../../utils";
 import { CalculatorVM, Sex, PhysicalActive, Target } from "./Calculator.vm";
 
 export const Calculator = observer(() => {
-	const vm = hook.useVm(() => new CalculatorVM())
+	const navigate = useNavigate();
 
+	const vm = hook.useVm(() => new CalculatorVM((
+		title: string,
+		icon: SweetAlertIcon,
+		isError: boolean
+	) => {
+		hook.useAlert().fire({
+			title: <p>{title}</p>,
+			icon,
+		}).then(() => {
+			if (isError) {
+				return;
+			}
+
+			navigate('/app/home')
+		})
+	}));
 
 	const heighError = vm.error.heigh && vm.isTrySave && (
 		<ErrorMessage message="Proszę wpisać poprawną wagę" />
@@ -18,6 +36,31 @@ export const Calculator = observer(() => {
 	const wageError = vm.error.wage && vm.isTrySave && (
 		<ErrorMessage message="Proszę wpisać poprawną wagę" />
 	)
+
+	const dontFindDiet = vm.isNotFoundDiet && <p>Nie mamy obecnie diety dla ciebie</p>;
+
+	const ProposalDiet = observer(() => {
+		if (vm.proposalDiet.length < 1) {
+			return;
+		}
+		console.log(vm.proposalDiet.length)
+		const result = vm.proposalDiet.map(item => (
+			<>
+				<h1>{item.name}</h1>
+				<p>{item.kcal}</p>
+				<button onClick={() => vm.setProposalDiet(item.id)}> Wybierz</button>
+			</>
+		))
+
+		return (
+			<div>
+				{result}
+
+				<button onClick={vm.assignDiet}>Zapisz decyzję</button>
+			</div>
+		)
+	})
+
 
 	return (
 		<div>
@@ -129,6 +172,8 @@ export const Calculator = observer(() => {
 					onClick={vm.save}
 				>Oblicz</button>
 			</div>
+			{dontFindDiet}
+			<ProposalDiet />
 		</div>
 	)
 })

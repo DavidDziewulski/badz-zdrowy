@@ -1,4 +1,5 @@
-import { makeAutoObservable } from 'mobx';
+import { baseUrl } from './../Api/baseUrl';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Diet } from '../models/Diet';
 import { DietWeek } from '../models/DietWeek';
 import { Meal } from '../models/Meal';
@@ -28,19 +29,34 @@ export class User {
 		await this.setDietPlan(this.dietId);
 	}
 
+	setDiet = (value: Diet) => {
+		this.diet = value;
+	}
+
 	setDietPlan = async (dietId: number) => {
-		await fetch('diet', {
+		await fetch(`${baseUrl}api/diet`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
 				dietId,
+				email: this.email,
 			}),
 		}).then((result) => result.json()).then(result => {
 			if (!result.ok) {
 				return result
 			};
+
+			const json = localStorage.getItem('currentUser');
+
+			const { email, name } = JSON.parse(json);
+
+			localStorage.setItem('currentUser', JSON.stringify({
+				email,
+				name,
+				dietId,
+			}));
 
 			const data = result.diet
 
@@ -74,18 +90,19 @@ export class User {
 			extendsObservable(newDiet, {
 				id: data.id,
 				kcal: data.kcal,
+				name: data.name,
 				firstWeek: toInternalWeek(data.data.firstWeek),
 				secondWeek: toInternalWeek(data.data.secondWeek),
 				thirdWeek: toInternalWeek(data.data.thirdWeek),
 				fourthWeek: toInternalWeek(data.data.fourthWeek),
 			})
 
-			this.diet = newDiet;
+			this.setDiet(newDiet);
 		}).catch(e => console.log(e));
 	}
 
 	register = async (email: string, name: string, password: string) => {
-		const result = await fetch('user', {
+		const result = await fetch(`${baseUrl}api/user`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -101,7 +118,7 @@ export class User {
 	}
 
 	login = async (email: string, password: string) => {
-		return await fetch('log-in', {
+		return await fetch(`${baseUrl}api/log-in`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -115,13 +132,13 @@ export class User {
 				return result
 			};
 
-			this.setUser(result.user.email, result.user.name, result.user.dietId)
+			this.setUser(result.user.email, result.user.name, result.user.dietId, true)
 
 			return result;
 		}).catch(e => e);
 	}
 
-	loadUser = () => {
+	loadUser = async () => {
 		const json = localStorage.getItem('currentUser');
 
 		if (!json) {
@@ -130,7 +147,7 @@ export class User {
 
 		const { email, name, dietId } = JSON.parse(json);
 
-		this.setUser(email, name, dietId)
+		await this.setUser(email, name, dietId)
 	}
 
 	logOut = () => {
@@ -139,12 +156,14 @@ export class User {
 		this.isActive = false;
 	}
 
-	setUser = async (email: string, name: string, dietId?: number) => {
-		window.localStorage.setItem('currentUser', JSON.stringify({
-			email,
-			name,
-			dietId,
-		}));
+	setUser = async (email: string, name: string, dietId?: number, addToStorage?: boolean) => {
+		if (addToStorage) {
+			localStorage.setItem('currentUser', JSON.stringify({
+				email,
+				name,
+				dietId,
+			}));
+		}
 
 		this.email = email;
 
@@ -154,7 +173,8 @@ export class User {
 			this.dietId = dietId;
 		}
 
-		await this.getdietPlan();
 		this.isActive = true;
+
+		await this.getdietPlan();
 	}
 }

@@ -8,14 +8,12 @@ class DietController {
 
 			const result = await Diet.findAll({ where: { kcal } });
 
-			console.log(result);
-
 			const diet = result.map(item => ({
 				id: item.dataValues.id,
 				kcal: item.dataValues.kcal,
 				name: item.dataValues.name,
 			}))
-			console.log(diet);
+
 			return res.status(200).json({
 				msg: 'Okej',
 				ok: true,

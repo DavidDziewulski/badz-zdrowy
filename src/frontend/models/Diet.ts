@@ -5,6 +5,8 @@ export class Diet {
 
 	kcal: number;
 
+	name: string;
+
 	firstWeek?: DietWeek
 
 	secondWeek?: DietWeek

@@ -6,33 +6,33 @@ import { userValidator } from '../validators';
 const router = express.Router();
 
 router.post(
-	'/user',
+	'/api/user',
 	userValidator.checkCreateUser(),
 	hook.useMiddleware,
 	userController.create,
 );
 
 router.get(
-	'/confirm',
+	'/api/confirm',
 	hook.useMiddleware,
 	userController.verify,
 )
 
 router.post(
-	'/diet',
+	'/api/diet',
 	hook.useMiddleware,
 	userController.diet,
 )
 
 router.post(
-	'/log-in',
+	'/api/log-in',
 	userValidator.checkLoginUser(),
 	hook.useMiddleware,
 	userController.logIn,
 )
 
 router.post(
-	'/app/diets',
+	'/api/diets',
 	hook.useMiddleware,
 	dietController.diet,
 )

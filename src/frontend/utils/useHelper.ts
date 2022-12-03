@@ -36,23 +36,31 @@ export const calculateBMR = (
 
 
 export const roundKcal = (kcal: number) => {
-	if (kcal < 1900 || kcal > 3700) {
+	if (kcal < 1300 || kcal > 4200) {
 		return 0;
 	}
 
-	if (kcal > 1800 && kcal <= 2200) {
-		return 2000
+	if (kcal > 1300 && kcal <= 1800) {
+		return 1500;
+	}
+
+	if (kcal > 1801 && kcal <= 2200) {
+		return 2000;
 	}
 
 	if (kcal > 2201 && kcal <= 2700) {
-		return 2500
+		return 2500;
 	}
 
 	if (kcal > 2701 && kcal <= 3200) {
-		return 3000
+		return 3000;
 	}
 
 	if (kcal > 3201 && kcal <= 3700) {
-		return 3500
+		return 3500;
+	}
+
+	if (kcal > 3701 && kcal <= 4200) {
+		return 4000;
 	}
 }

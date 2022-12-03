@@ -13,7 +13,7 @@ class UserController {
 			subject: 'Rejestracja na poratlu Bądź Zdrowy',
 			text: 'text',
 			html: `<p>Klinkij
-						<a href="http://localhost:3000/confirm?id=${token}">
+						<a href="http://localhost:3000/api/confirm?id=${token}">
 							tutaj
 						</a> aby zatwierdzić konto
 				</p>`,
@@ -34,7 +34,7 @@ class UserController {
 
 			await this.sendEmail(req.body.email, token);
 
-			await User.create({ ...req.body, tokenId: token, dietId: 1 }) //here
+			await User.create({ ...req.body, tokenId: token }) //here
 
 			if (res.statusCode)
 				return res.json({ msg: 'Successfully create user', ok: true })
@@ -76,11 +76,24 @@ class UserController {
 		try {
 			const dietId = req.body.dietId;
 
+			const email = req.body.email;
+
+			const user = await User.findOne(({ where: { email } }))
+
 			const result = await Diet.findOne({ where: { id: dietId } });
 
 			if (!result) {
 				throw new Error("Nie ma takiej diety")
 			}
+
+			await user.update(
+				{
+					dietId,
+				},
+				{
+					where: { email: email },
+				}
+			);
 
 			return res.status(200).json({
 				msg: 'Okej',
@@ -88,6 +101,7 @@ class UserController {
 				diet: {
 					id: result.dataValues.id,
 					kcal: result.dataValues.kcal,
+					name: result.dataValues.name,
 					data: JSON.parse(result.dataValues.data),
 				}
 			});

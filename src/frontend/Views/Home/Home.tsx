@@ -11,7 +11,7 @@ type Props = {
 const Plan = observer(({ vm }: Props) => (
 	<div className="flex flex-wrap text-center content-center text-white w-full">
 		<div className="w-full">
-			<h2 className="p-4 ">Twój Plan Żywieniowy</h2>
+			<h2 className="p-4 ">Twój Plan Żywieniowy {store.user?.diet.name}</h2>
 			<span className="w-full">
 				Aby zmienić Plan żywieniowy przejdź do zakładki,
 				<NavLink className="font-bold hover:text-gray-400" to="/app/calculator">
@@ -118,7 +118,7 @@ const WithoutPlan = () => (
 
 export const Home = observer(() => {
 	const vm = hook.useVm(() => new HomeVm());
-
+	console.log(store.user.diet)
 	const Content = vm.hasDiet ? <Plan vm={vm} /> : <WithoutPlan />
 
 	return (Content)

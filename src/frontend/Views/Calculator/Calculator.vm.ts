@@ -1,6 +1,8 @@
 import { makeAutoObservable } from 'mobx';
+import { SweetAlertIcon } from 'sweetalert2';
+import { Diet } from '../../models';
 import { store } from '../../store';
-import { utils } from '../../utils';
+import { extendsObservable, utils } from '../../utils';
 
 export enum Sex {
 	male = 'male',
@@ -49,7 +51,13 @@ export class CalculatorVM {
 
 	bmr = 0;
 
-	constructor() {
+	isNotFoundDiet = false;
+
+	proposalDiet: Diet[] = [];
+
+	proposalDietId?: number;
+
+	constructor(private onMsg: (title: string, icon: SweetAlertIcon, isError: boolean) => void) {
 		makeAutoObservable(this);
 	}
 
@@ -136,6 +144,10 @@ export class CalculatorVM {
 
 		this.isSaving = true;
 
+		this.isNotFoundDiet = false;
+
+		this.proposalDiet = [];
+
 		(async () => {
 			this.bmr = utils.calculateBMR(
 				this.sex,
@@ -149,43 +161,69 @@ export class CalculatorVM {
 			const kcal = utils.roundKcal(this.bmr);
 
 			if (!kcal) {
-				console.log(kcal);
-				console.log('nie ma diety');
+				this.isSaving = false;
+
+				this.isNotFoundDiet = true;
+
+				return
+			}
+
+			const result = await store.diets
+				.proposalDiet(kcal);
+
+
+			if (!result.ok) {
+				console.log('error');
+				// this.onMsg(`${result.msg}`, 'error', true);
 				this.isSaving = false;
 				return
 			}
 
-			const test = utils.roundKcal(this.bmr);
-			console.log('here')
-			const result = await store.diets
-				.proposalDiet(test);
+			result.diet.map((item: Diet) => {
+				const newDiet = new Diet();
 
-			// console.log(result);
+				extendsObservable(newDiet, {
+					id: item.id,
+					kcal: item.kcal,
+					name: item.name,
+				})
 
-			// if (!result.ok) {
-			// 	console.log(result, 'error')
-			// }
-
-			// console.log(result, 'okej');
-
-			// if (!result.ok) {
-			// 	if (result.msg) {
-			// 		this.onMsg(`${result.msg}`, 'error', true);
-
-			// 		this.isSaving = false;
-
-			// 		return;
-			// 	}
-
-			// 	this.onMsg(`${result.errors[0].msg}`, 'error', true);
-
-			// 	this.isSaving = false;
-
-			// 	return;
-			// }
+				this.proposalDiet.push(newDiet);
+			})
 
 			this.isSaving = false;
 		}
 		)()
+	}
+
+	setProposalDiet = (id?: number) => {
+		if (!id) {
+			return;
+		}
+
+		const find = this.proposalDiet.find(item => item.id === id);
+
+		if (!find) {
+			return;
+		}
+
+		this.proposalDietId = id;
+	}
+
+	assignDiet = () => {
+		if (this.isSaving || !this.proposalDietId) {
+			return;
+		}
+
+		this.isSaving = true;
+
+		(async () => {
+			await store.user.setDietPlan(this.proposalDietId)
+
+			this.isSaving = false;
+
+			this.onMsg('Dieta została przypisana do twojego jadłospisu', 'success', false);
+
+		})()
 	}
 }
