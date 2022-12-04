@@ -1,9 +1,10 @@
 import { observer } from "mobx-react";
+import { store } from "../../store";
 import { hook } from "../../utils";
 import { DietVm } from "./Diet.vm";
 
 export const Diet = observer(() => {
-	const vm = hook.useVm(() => new DietVm());
+	const vm = hook.useVm(() => new DietVm(), [store.articles.articles]);
 
 	const Content = observer(() => {
 		const data = vm.articles?.map(item => (

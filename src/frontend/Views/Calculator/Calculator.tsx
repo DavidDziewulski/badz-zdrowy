@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import { useNavigate } from "react-router-dom";
 import { SweetAlertIcon } from "sweetalert2";
 import { ErrorMessage } from "../../components";
+import { store } from "../../store";
 import { hook } from "../../utils";
 import { CalculatorVM, Sex, PhysicalActive, Target } from "./Calculator.vm";
 

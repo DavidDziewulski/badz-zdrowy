@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, observable } from 'mobx';
 import { Article, ArtType, Content } from '../models';
 import { extendsObservable } from '../utils';
 import { baseUrl } from './../Api/baseUrl';
@@ -12,10 +12,6 @@ export class Articles {
 		this.loadArticles();
 	}
 
-	get getArticles() {
-		return this.articles;
-	}
-
 	get dietArticles() {
 		if (this.articles.length === 0) {
 			return;
@@ -26,9 +22,10 @@ export class Articles {
 
 	get physicArticles() {
 		if (this.articles.length === 0) {
+			console.log('hej')
 			return;
 		}
-
+		console.log('yal')
 		return this.articles.filter(item => item.category === ArtType.physic);
 	}
 

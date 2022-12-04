@@ -1,10 +1,11 @@
 import { observer } from "mobx-react";
+import { store } from "../../store";
 import { hook } from "../../utils";
 import { PhysicalHealthVm } from "./PhysicalHealth.vm";
 
 
 export const PhysicalHealth = observer(() => {
-	const vm = hook.useVm(() => new PhysicalHealthVm());
+	const vm = hook.useVm(() => new PhysicalHealthVm(), [store.articles.articles]);
 
 	const Content = observer(() => {
 		const data = vm.articles?.map(item => (
