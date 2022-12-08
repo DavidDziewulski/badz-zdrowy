@@ -59,6 +59,18 @@ const initialValue = async () => {
 	await Article.create({ title: 'Jak szybko zbudować masę mięśniową?', description: 'Chcesz zbudować masę mięśniową, ale nie wiesz od czego zacząć? Z tego artykułu dowiesz się, ile razy w tygodniu najlepiej trenować oraz co jeść, aby osiągnąć wymarzoną sylwetkę.Spis treści:• Jak szybko zbudować masę mięśniową?• Budowanie masy mięśniowej- kluczowe...', icon: 'masamiesniowa.png', data: arts, category: ArtType.physic })
 
 	await Article.create({ title: 'Aeroby czy interwały?', description: 'Osoby, które podjęły decyzję o wprowadzeniu aktywności często zastanawiają się jaką formę treningu wydolnościowego wybrać, aby były oczekiwane rezultaty. Dziś postaram się odpowiedzieć na to pytanie i doradzić co będzie najlepsze dla Ciebie! Czego się dowiesz? Co to...', icon: 'aeroby.png', data: arts, category: ArtType.physic })
+
+	await Article.create({ title: 'Rodzaje temperamentu', description: 'Temperament w myśl psychologii jest zespołem cech osobowości. Ujawniają się one już u bardzo małego dziecka – na ogół w pierwszym roku...', icon: 'temperament.jpg', data: arts, category: ArtType.mental })
+
+	await Article.create({ title: 'Rodzaje terapii. Którą wybrać?', description: 'Właściwy wybór terapii psychologicznej jest ważny dla naszego samopoczucia i realizacji celu. Sprawdź, czym różnią się poszczególne nurty psychoterapii i jaki będzie najlepszy...', icon: 'kogowybrac.png', data: arts, category: ArtType.mental })
+
+	await Article.create({ title: 'Kryzys psychiczny jak sobie z nim radzić?', description: 'Kryzys psychiczny jest momentem przełomowym, w którym rozstrzyga się dalszy kierunek naszego rozwoju. Kryzys  ”to odczuwanie lub doświadczanie wydarzenia bądź sytuacji... ', icon: 'kryzys.jpg', data: arts, category: ArtType.mental })
+
+	await Article.create({ title: 'Jak poradzić sobie ze stratą pracy?', description: 'Strata pracy jest bardzo bardzo wysoko na liście stresujących sytuacji życiowych. Podczas gdy szukanie nowego zajęcia i dbanie o utracone dochody jest priorytetem, o tyle ważne jest też...', icon: 'stracicprace.jpg', data: arts, category: ArtType.mental })
+
+	await Article.create({ title: 'Jak skutecznie wypocząć w wakacje?', description: 'Wszyscy z utęsknieniem czekamy na wakacje. Jest to czas na „naładowanie akumulatorów”, odpoczynek, relaks i zwolnienie chociaż na chwilę. Po całym roku pracy, obowiązków ... ', icon: 'wakacje.jpg', data: arts, category: ArtType.mental })
+
+	await Article.create({ title: 'Czy stress może być pozytywny?', description: 'Stres kojarzy nam się z dyskomfortem, uczuciem niepokoju, przytłoczenia. Jak się jednak okazuje, istnieje coś takiego jak „stres pozytywny”, czyli tzw. eustres. W wielu sytuacjach ...', icon: 'stres.jpg', data: arts, category: ArtType.mental })
 }
 
 const app = express();

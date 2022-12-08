@@ -1,4 +1,4 @@
-import { makeAutoObservable, observable } from 'mobx';
+import { makeAutoObservable, observable, runInAction } from 'mobx';
 import { Article, ArtType, Content } from '../models';
 import { extendsObservable } from '../utils';
 import { baseUrl } from './../Api/baseUrl';
@@ -20,13 +20,25 @@ export class Articles {
 		return this.articles.filter(item => item.category === ArtType.diet);
 	}
 
-	get physicArticles() {
+	get mentalArticles() {
 		if (this.articles.length === 0) {
-			console.log('hej')
 			return;
 		}
-		console.log('yal')
+
+		return this.articles.filter(item => item.category === ArtType.mental);
+	}
+
+
+	get physicArticles() {
+		if (this.articles.length === 0) {
+			return;
+		}
+
 		return this.articles.filter(item => item.category === ArtType.physic);
+	}
+
+	findArticle = (id: number) => {
+		return this.articles.find(item => item.id === id);
 	}
 
 	loadArticles = async () => {
@@ -59,22 +71,25 @@ export class Articles {
 				}
 			}
 
-			this.articles = arts.map((item: any) => {
-				const newArt = new Article();
+			runInAction(() => {
+				this.articles = arts.map((item: any) => {
+					const newArt = new Article();
 
-				const { titleContent, tableOfContents, content } = toInternalContent(item.data);
+					const { titleContent, tableOfContents, content } = toInternalContent(item.data);
 
-				extendsObservable(newArt, {
-					id: item.id,
-					title: item.title,
-					icon: item.icon,
-					description: item.description,
-					category: item.category,
-					titleContent,
-					tableOfContents,
-					content,
+					extendsObservable(newArt, {
+						id: item.id,
+						title: item.title,
+						icon: item.icon,
+						description: item.description,
+						category: item.category,
+						titleContent,
+						tableOfContents,
+						content,
+					})
+					return newArt;
 				})
-				return newArt;
+
 			})
 		}).catch(e => console.log(e));
 	}

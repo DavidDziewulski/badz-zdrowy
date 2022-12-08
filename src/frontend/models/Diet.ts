@@ -1,3 +1,4 @@
+import { makeAutoObservable } from 'mobx';
 import { DietWeek } from "./DietWeek";
 
 export class Diet {
@@ -14,4 +15,8 @@ export class Diet {
 	thirdWeek?: DietWeek
 
 	fourthWeek?: DietWeek
+
+	constructor() {
+		makeAutoObservable(this)
+	}
 }
