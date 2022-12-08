@@ -11,9 +11,9 @@ export class Article {
 
 	title = '';
 
-	icon = '';
-
 	description = '';
+
+	icon = '';
 
 	category?: ArtType;
 

@@ -44,7 +44,7 @@ export const Calculator = observer(() => {
 		if (vm.proposalDiet.length < 1) {
 			return;
 		}
-		console.log(vm.proposalDiet.length)
+
 		const result = vm.proposalDiet.map(item => (
 			<>
 				<h1>{item.name}</h1>

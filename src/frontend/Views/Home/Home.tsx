@@ -1,4 +1,5 @@
 import { observer } from "mobx-react";
+import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
 import { store } from "../../store";
 import { hook } from "../../utils";
@@ -65,38 +66,38 @@ const Plan = observer(({ vm }: Props) => (
 			<tbody>
 				<tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
 					<td className="border-r">śniadanie</td>
-					{store.user?.diet[vm.actuallWeek].breakfast.map(item => (
-						<>
-							<td key={item.title} className="border-r"><span>{item.title}</span>
-								{item.desc.map(el => (
-									<li key={el}>{el}</li>
+					{store.user?.diet[vm.actuallWeek].breakfast.map((item, i) => (
+						<Fragment key={item.title + i}>
+							<td className="border-r"><span>{item.title}</span>
+								{item.desc.map((el, i) => (
+									<li key={el + i}>{el}</li>
 								))}
 							</td>
-						</>
+						</Fragment>
 					))}
 				</tr>
 				<tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
 					<td className="border-r">Obiad</td>
-					{store.user?.diet[vm.actuallWeek].dinner.map(item => (
-						<>
-							<td key={item.title} className="border-r"><span>{item.title}</span>
-								{item.desc.map(el => (
-									<li key={el}>{el}</li>
+					{store.user?.diet[vm.actuallWeek].dinner.map((item, i) => (
+						<Fragment key={item.title + i}>
+							<td className="border-r"><span>{item.title}</span>
+								{item.desc.map((el, i) => (
+									<li key={el + i}>{el}</li>
 								))}
 							</td>
-						</>
+						</Fragment>
 					))}
 				</tr>
 				<tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
 					<td className="border-r">Kolacja</td>
-					{store.user?.diet[vm.actuallWeek].supper.map(item => (
-						<>
-							<td key={item.title} className="border-r"><span>{item.title}</span>
-								{item.desc.map(el => (
-									<li key={el}>{el}</li>
+					{store.user?.diet[vm.actuallWeek].supper.map((item, i) => (
+						<Fragment key={item.title + i}>
+							<td className="border-r"><span>{item.title}</span>
+								{item.desc.map((el, i) => (
+									<li key={el + i}>{el}</li>
 								))}
 							</td>
-						</>
+						</Fragment>
 					))}
 				</tr>
 			</tbody>
@@ -117,9 +118,9 @@ const WithoutPlan = () => (
 );
 
 export const Home = observer(() => {
-	const vm = hook.useVm(() => new HomeVm());
-	console.log(store.user.diet)
-	const Content = vm.hasDiet ? <Plan vm={vm} /> : <WithoutPlan />
+	const vm = hook.useVm(() => new HomeVm(), [store.user.isSaving]);
+
+	const Content = vm.diet ? <Plan vm={vm} /> : <WithoutPlan />
 
 	return (Content)
 });

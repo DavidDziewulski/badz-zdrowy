@@ -173,7 +173,6 @@ export class CalculatorVM {
 
 
 			if (!result.ok) {
-				console.log('error');
 				// this.onMsg(`${result.msg}`, 'error', true);
 				this.isSaving = false;
 				return

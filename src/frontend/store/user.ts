@@ -1,5 +1,5 @@
 import { baseUrl } from './../Api/baseUrl';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, observable } from 'mobx';
 import { Diet } from '../models/Diet';
 import { DietWeek } from '../models/DietWeek';
 import { Meal } from '../models/Meal';
@@ -15,25 +15,25 @@ export class User {
 
 	diet?: Diet;
 
+	isSaving = false;
+
 	constructor() {
 		makeAutoObservable(this);
 
 		this.loadUser();
 	}
 
-	getdietPlan = async () => {
+	getdietPlan = () => {
 		if (!this.dietId) {
 			return;
 		}
 
-		await this.setDietPlan(this.dietId);
-	}
-
-	setDiet = (value: Diet) => {
-		this.diet = value;
+		this.setDietPlan(this.dietId);
 	}
 
 	setDietPlan = async (dietId: number) => {
+		this.isSaving = true;
+
 		await fetch(`${baseUrl}api/diet`, {
 			method: 'POST',
 			headers: {
@@ -45,6 +45,7 @@ export class User {
 			}),
 		}).then((result) => result.json()).then(result => {
 			if (!result.ok) {
+				this.isSaving = false;
 				return result
 			};
 
@@ -97,8 +98,12 @@ export class User {
 				fourthWeek: toInternalWeek(data.data.fourthWeek),
 			})
 
-			this.setDiet(newDiet);
-		}).catch(e => console.log(e));
+			runInAction(() => {
+				this.diet = newDiet;
+				this.isSaving = false;
+			})
+
+		}).catch(e => { this.isSaving = false; console.log(e) });
 	}
 
 	register = async (email: string, name: string, password: string) => {
@@ -175,6 +180,6 @@ export class User {
 
 		this.isActive = true;
 
-		await this.getdietPlan();
+		this.getdietPlan();
 	}
 }
