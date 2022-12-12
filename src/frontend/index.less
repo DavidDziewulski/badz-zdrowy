@@ -1,0 +1,123 @@
+@c1: #111827;
+@c2: #f9fafb;
+@c3: #1f2937;
+@c4: #374151;
+@c5: #4b5563;
+
+@ca1: #2563eb;
+@ca1l: lighten(@ca1, 5%);
+@ca1d: darken(@ca1, 10%);
+@ca2: #db2777;
+
+@f1: 'Arial';
+
+.asResponsive(@maxWidth; @rules) {
+	@media only screen and (max-width: @maxWidth) {
+		@rules();
+	}
+}
+
+.asMobile(@rules) {
+	.asResponsive(640px, {
+		@rules();
+	});
+}
+
+.block(@padding: 0px) {
+	padding: @padding;
+	background-color: @c3;
+	border: 1px solid @c4;
+	border-radius: 12px;
+}
+
+.asInput(@rules) {
+
+	input[type="text"],
+	input[type="password"],
+	input[type="email"] {
+		@rules();
+	}
+}
+
+.asError(@rules) {
+	p[data-role="error"] {
+		@rules();
+	}
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: @c1;
+	color: @c2;
+	min-height: 100vh;
+	padding: 0;
+	margin: 0;
+	font-family: @f1;
+}
+
+#app {
+	min-height: 100vh;
+}
+
+h1 {
+	font-size: 1.5rem;
+	line-height: 2rem;
+	font-weight: bold;
+	margin-top: 0;
+}
+
+.asInput({
+	color: white;
+	padding: 0.625rem;
+	border-radius: 0.5rem;
+	width: 100%;
+	display: block;
+	background-color: @c4;
+	border: 1px solid @c5;
+
+	&:focus {
+		outline: @ca1 solid 2px;
+	}
+});
+
+.asError({
+	color: @ca2;
+	font-size: smaller;
+});
+
+button {
+	color: white;
+	padding: 0.625rem;
+	border-radius: 0.5rem;
+	text-align: center;
+	width: 100%;
+	display: block;
+	background-color: @ca1l;
+	border: 0 solid transparent;
+
+	&:focus {
+		outline: @ca1d solid 2px;
+	}
+
+	&:hover {
+		background-color: @ca1;
+		cursor: pointer;
+	}
+}
+
+a {
+	color: @ca1;
+	text-decoration: none;
+
+	&:focus,
+	&:hover {
+		text-decoration: underline;
+		cursor: pointer;
+		color: @ca1l;
+	}
+}
+
+@import './Views/**/*.less';

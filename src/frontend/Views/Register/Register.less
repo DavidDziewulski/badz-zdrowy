@@ -1,0 +1,68 @@
+section.register {
+	min-width: 100%;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	.asMobile({
+		display: block;
+		padding: 10px;
+		width: 100%;
+	});
+
+.logo {
+	color: white;
+	font-weight: 600;
+	font-size: 1.5rem;
+	line-height: 2rem;
+	margin-bottom: 1.5rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	img {
+		width: 75px;
+		height: 75px;
+		margin-right: 10px;
+	}
+}
+
+.block {
+	.block(30px);
+
+	max-width: 500px;
+	width: 100%;
+
+	.asMobile({
+		max-width: 100%;
+		width: 100%;
+	});
+
+h1 {
+	margin-bottom: 20px;
+}
+
+form {
+	label {
+		padding: 5px 0;
+		margin-bottom: 10px;
+		display: block;
+	}
+
+	.asInput({
+		margin-bottom: 10px;
+	});
+
+.asError({
+	margin-bottom: 10px;
+});
+}
+
+.desc {
+	color: #c5c5c5;
+}
+}
+}
