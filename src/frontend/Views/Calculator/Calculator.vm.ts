@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, action } from 'mobx';
 import { SweetAlertIcon } from 'sweetalert2';
 import { Diet } from '../../models';
 import { store } from '../../store';
@@ -55,10 +55,12 @@ export class CalculatorVM {
 
 	proposalDiet: Diet[] = [];
 
-	proposalDietId?: number;
+	proposalDietId?: number = undefined;
 
 	constructor(private onMsg: (title: string, icon: SweetAlertIcon, isError: boolean) => void) {
-		makeAutoObservable(this);
+		makeAutoObservable(this, {
+			setProposalDiet: action,
+		});
 	}
 
 	test = () => [

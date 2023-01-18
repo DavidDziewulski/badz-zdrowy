@@ -18,23 +18,29 @@
 }
 
 .asMobile(@rules) {
-	.asResponsive(640px, {
+	.asResponsive(768px, {
 		@rules();
 	});
+}
+
+.rounded() {
+	border-radius: 15px;
 }
 
 .block(@padding: 0px) {
 	padding: @padding;
 	background-color: @c3;
 	border: 1px solid @c4;
-	border-radius: 12px;
+	.rounded();
 }
 
 .asInput(@rules) {
 
 	input[type="text"],
 	input[type="password"],
-	input[type="email"] {
+	input[type="email"],
+	input[type="number"],
+	select {
 		@rules();
 	}
 }
@@ -49,6 +55,22 @@
 	box-sizing: border-box;
 }
 
+html {
+	font-size: 13px;
+
+	@media screen and (min-width: 1024px) {
+		font-size: 14px;
+	}
+
+	@media screen and (min-width: 1440px) {
+		font-size: 15px;
+	}
+
+	@media screen and (min-width: 1600px) {
+		font-size: 16px;
+	}
+}
+
 body {
 	background-color: @c1;
 	color: @c2;
@@ -56,6 +78,21 @@ body {
 	padding: 0;
 	margin: 0;
 	font-family: @f1;
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: @ca1;
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: @c5;
+	border-radius: 10px;
 }
 
 #app {
@@ -70,42 +107,59 @@ h1 {
 }
 
 .asInput({
+	.rounded();
+
+	font-family: inherit;
 	color: white;
 	padding: 0.625rem;
-	border-radius: 0.5rem;
 	width: 100%;
 	display: block;
 	background-color: @c4;
 	border: 1px solid @c5;
+	outline: none;
 
 	&:focus {
-		outline: @ca1 solid 2px;
+		border-color: @ca1;
 	}
+
+	.asMobile({
+		font-size: 14px;
+	});
 });
 
 .asError({
 	color: @ca2;
 	font-size: smaller;
+
+	.asMobile({
+		font-size: 14px;
+		margin: 5px 0;
+	});
+
 });
 
 button {
+	.rounded();
+
+	font-family: inherit;
 	color: white;
 	padding: 0.625rem;
-	border-radius: 0.5rem;
 	text-align: center;
 	width: 100%;
 	display: block;
 	background-color: @ca1l;
 	border: 0 solid transparent;
-
-	&:focus {
-		outline: @ca1d solid 2px;
-	}
+	outline: none;
+	transition: background-color .15s ease-in;
 
 	&:hover {
 		background-color: @ca1;
 		cursor: pointer;
 	}
+
+	.asMobile({
+		font-size: 14px;
+	});
 }
 
 a {

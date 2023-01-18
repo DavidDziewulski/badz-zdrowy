@@ -45,75 +45,73 @@ export const Register = observer(() => {
 		<section className="register">
 			<div className="logo">
 				<img src="/assets/bz.png" alt="logo" />
-			</div>
-			<div>
-				Bądź zdrowy
-				<div className="block">
-					<h1>
-						Utwórz konto
-					</h1>
-					<form onSubmit={vm.save}>
-						<div>
-							<label htmlFor="email">
-								Twój E-mail
-							</label>
-							<input
-								type="text"
-								name="email"
-								id="email"
-								placeholder="nazwa@email.com"
-								value={vm.email}
-								onChange={e => vm.setEmail(e.target.value)}
-							/>
-							{emailError}
-						</div>
-						<div>
-							<label htmlFor="name">
-								Twoje Imię
-							</label>
-							<input
-								type="text"
-								name="name"
-								id="name"
-								placeholder="wpisz swoje imię"
-								value={vm.userName}
-								onChange={e => vm.setUserName(e.target.value)}
-							/>
-							{nameError}
-						</div>
-						<div>
-							<label htmlFor="password">Hasło</label>
-							<input
-								type="password"
-								autoComplete="on"
-								name="password"
-								id="password"
-								placeholder="••••••••"
-								value={vm.password}
-								onChange={e => vm.setPassword(e.target.value)}
-							/>
-							{passwordError}
-						</div>
-						<label data-role="checkbox">
-							<input
-								id="terms"
-								type="checkbox"
-								checked={vm.isAccept}
-								onChange={vm.setAccept}
-							/>
-							Akceptuję&nbsp;
-							<a>Warunki założenia konta</a>
-						</label>
-						{acceptError}
-						<button type="submit">
-							Stwórz konto
-						</button>
-						<p className="desc">
-							Masz już konto?&nbsp;
-							<Link to='/log-in'>Zaloguj się</Link>
-						</p>
-					</form>
+				<div>
+					Bądź zdrowy
 				</div>
+			</div>
+			<div className="block">
+				<h1>Utwórz konto</h1>
+				<form onSubmit={vm.save}>
+					<div>
+						<label htmlFor="email">
+							Twój E-mail
+						</label>
+						<input
+							type="text"
+							name="email"
+							id="email"
+							placeholder="nazwa@email.com"
+							value={vm.email}
+							onChange={e => vm.setEmail(e.target.value)}
+						/>
+						{emailError}
+					</div>
+					<div>
+						<label htmlFor="name">
+							Twoje Imię
+						</label>
+						<input
+							type="text"
+							name="name"
+							id="name"
+							placeholder="wpisz swoje imię"
+							value={vm.userName}
+							onChange={e => vm.setUserName(e.target.value)}
+						/>
+						{nameError}
+					</div>
+					<div>
+						<label htmlFor="password">Hasło</label>
+						<input
+							type="password"
+							autoComplete="on"
+							name="password"
+							id="password"
+							placeholder="••••••••"
+							value={vm.password}
+							onChange={e => vm.setPassword(e.target.value)}
+						/>
+						{passwordError}
+					</div>
+					<label data-role="checkbox">
+						<input
+							id="terms"
+							type="checkbox"
+							checked={vm.isAccept}
+							onChange={vm.setAccept}
+						/>
+						Akceptuję&nbsp;
+						<a>Warunki założenia konta</a>
+						</label>
+					{acceptError}
+					<button type="submit">
+						Stwórz konto
+					</button>
+					<p className="desc">
+						Masz już konto?&nbsp;
+						<Link to='/log-in'>Zaloguj się</Link>
+					</p>
+				</form>
 			</div>
 		</section>
 	)

@@ -1,4 +1,4 @@
-import { makeAutoObservable, observable } from 'mobx';
+import { makeAutoObservable, observable, action } from 'mobx';
 import { store } from '../../store';
 
 export enum ActuallWeek {
@@ -16,6 +16,7 @@ export class HomeVm {
 	constructor() {
 		makeAutoObservable(this, {
 			diet: observable.deep,
+			setWeek: action,
 		});
 	}
 

@@ -22,7 +22,7 @@ export const Calculator = observer(() => {
 				return;
 			}
 
-			navigate('/app/home')
+			navigate('/app/home');
 		})
 	}));
 
@@ -38,7 +38,7 @@ export const Calculator = observer(() => {
 		<ErrorMessage message="Proszę wpisać poprawną wagę" />
 	)
 
-	const dontFindDiet = vm.isNotFoundDiet && <p>Nie mamy obecnie diety dla ciebie</p>;
+	const dontFindDiet = vm.isNotFoundDiet && <h1 className="no-diet">😥 Nie mamy obecnie diety dla ciebie</h1>;
 
 	const ProposalDiet = observer(() => {
 		if (vm.proposalDiet.length < 1) {
@@ -46,17 +46,19 @@ export const Calculator = observer(() => {
 		}
 
 		const result = vm.proposalDiet.map(item => (
-			<>
+			<div key={item.id} className="item" data-is-active={item.id === vm.proposalDietId}>
 				<h1>{item.name}</h1>
-				<p>{item.kcal}</p>
-				<button onClick={() => vm.setProposalDiet(item.id)}> Wybierz</button>
-			</>
+				<div className="kcal">{item.kcal} kcal</div>
+				<button onClick={() => vm.setProposalDiet(item.id)}>Wybierz</button>
+			</div>
 		))
 
 		return (
-			<div>
-				{result}
-
+			<div className="results">
+				<h1>Wybierz dietę</h1>
+				<div className="list">
+					{result}
+				</div>
 				<button onClick={vm.assignDiet}>Zapisz decyzję</button>
 			</div>
 		)
@@ -64,11 +66,11 @@ export const Calculator = observer(() => {
 
 
 	return (
-		<div>
-			<div>Tutaj znajduje się opis kalkulatora</div>
-			<div>
-				<div>
-					<span>Płeć</span>
+		<div className="calculator">
+			<h1>Kalkulator</h1>
+			<div className="table">
+				<div className="title-a">Płeć</div>
+				<div className="value-a">
 					<select onChange={e => vm.setSex(e.target.value as Sex)}>
 						<option value={Sex.female}>
 							Kobieta
@@ -78,8 +80,8 @@ export const Calculator = observer(() => {
 						</option>
 					</select>
 				</div>
-				<div>
-					<span>Waga</span>
+				<div className="title-b">Waga</div>
+				<div className="value-b">
 					<input
 						id="wage"
 						onChange={e => vm.setWage(e.target.value)}
@@ -91,8 +93,8 @@ export const Calculator = observer(() => {
 					/>
 					{wageError}
 				</div>
-				<div>
-					<span>Wzrost</span>
+				<div className="title-a">Wzrost</div>
+				<div className="value-a">
 					<input
 						type="number"
 						value={vm.heigh}
@@ -103,8 +105,8 @@ export const Calculator = observer(() => {
 					/>
 					{heighError}
 				</div>
-				<div>
-					<span>Wiek</span>
+				<div className="title-b">Wiek</div>
+				<div className="value-b">
 					<input
 						type="number"
 						value={vm.old}
@@ -115,8 +117,8 @@ export const Calculator = observer(() => {
 					/>
 					{oldError}
 				</div>
-				<div>
-					<span>Aktywność fizyczna</span>
+				<div className="title-a">Aktywność fizyczna<sup>1</sup></div>
+				<div className="value-a">
 					<select onChange={e => vm.setPhysicActivity(Number(e.target.value) as PhysicalActive)}>
 						<option value={PhysicalActive.verySmall}>
 							1.3
@@ -144,8 +146,8 @@ export const Calculator = observer(() => {
 						</option>
 					</select>
 				</div>
-				<div>
-					<span>Cel diety</span>
+				<div className="title-b">Cel diety</div>
+				<div className="value-b">
 					<select onChange={e => vm.setTarget(e.target.value as Target)}>
 						<option value={Target.loseWeight}>
 							Schudnąć
@@ -158,6 +160,9 @@ export const Calculator = observer(() => {
 						</option>
 					</select>
 				</div>
+			</div>
+			<h1><sup>1</sup> Rodzaje aktywności fizycznej</h1>
+			<div>
 				<ul>
 					<li>1.3 - osoba leżąca; choroba; całkowity brak ruchu</li>
 					<li>1.4 - siedzący tryb życia; ~6000 kroków dziennie</li>

@@ -27,12 +27,12 @@ export const Article = observer(() => {
 		))
 
 	return (
-		<div>
+		<div className="article">
 			<h1>{vm.article.title}</h1>
-			<img src={`/assets/${vm.article.icon}`} className="" />
+			<div className="img" style={{ backgroundImage: `url(/assets/${vm.article.icon})` }} />
 			<p>{vm.article.titleContent}</p>
 			<ul>{tableOfContents}</ul>
 			{artContent}
 		</div>
-	)
+	);
 });

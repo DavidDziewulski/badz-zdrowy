@@ -13,7 +13,6 @@ export const Login = observer(() => {
 		hook.useAlert().fire({
 			title: <p>{title}</p>,
 			icon,
-			// https://stackoverflow.com/questions/57731302/reactjs-sweetalert2-put-input-above-html
 		})
 	}));
 
@@ -29,48 +28,48 @@ export const Login = observer(() => {
 		<section className="login">
 			<div className="logo">
 				<img src="/assets/bz.png" alt="logo" />
-				Bądź zdrowy
-				<div className="block">
-					<h1>Zaloguj się</h1>
-					<form onSubmit={vm.save}>
-						<div>
-							<label htmlFor="email">
-								Twój E-mail
-							</label>
-							<input
-								type="text"
-								name="email"
-								id="email"
-								placeholder="nazwa@email.com"
-								value={vm.email}
-								onChange={e => vm.setEmail(e.target.value)}
-							/>
-							{emailError}
-						</div>
-						<div>
-							<label htmlFor="password">Hasło</label>
-							<input
-								type="password"
-								autoComplete="on"
-								name="password"
-								id="password"
-								placeholder="••••••••"
-								value={vm.password}
-								onChange={e => vm.setPassword(e.target.value)}
-							/>
-							{passwordError}
-						</div>
-						<button type="submit">
-							Zaloguj
-						</button>
-						<p className="desc">
-							Nie masz jeszcze konta?&nbsp;
-							<Link to='/register'>
-								Zarejestruj się
-							</Link>
-						</p>
-					</form>
+				<div>
+					Bądź zdrowy
 				</div>
+			</div>
+			<div className="block">
+				<h1>Zaloguj się</h1>
+				<form onSubmit={vm.save}>
+					<div>
+						<label htmlFor="email">Twój E-mail</label>
+						<input
+							type="text"
+							name="email"
+							id="email"
+							placeholder="nazwa@email.com"
+							value={vm.email}
+							onChange={e => vm.setEmail(e.target.value)}
+						/>
+						{emailError}
+					</div>
+					<div>
+						<label htmlFor="password">Hasło</label>
+						<input
+							type="password"
+							autoComplete="on"
+							name="password"
+							id="password"
+							placeholder="••••••••"
+							value={vm.password}
+							onChange={e => vm.setPassword(e.target.value)}
+						/>
+						{passwordError}
+					</div>
+					<button type="submit">
+						Zaloguj
+					</button>
+					<p className="desc">
+						Nie masz jeszcze konta?&nbsp;
+						<Link to='/register'>
+							Zarejestruj się
+						</Link>
+					</p>
+				</form>
 			</div>
 		</section>
 	)

@@ -8,7 +8,7 @@ section.login {
 
 	.asMobile({
 		display: block;
-		padding: 10px;
+		padding: 40px 22px 20px;
 		width: 100%;
 	});
 
@@ -23,11 +23,15 @@ section.login {
 	justify-content: center;
 	align-items: center;
 
-	img {
-		width: 75px;
-		height: 75px;
-		margin-right: 10px;
-	}
+	.asMobile({
+		margin-bottom: 40px;
+	});
+
+img {
+	width: 75px;
+	height: 75px;
+	margin-right: 10px;
+}
 }
 
 .block {
@@ -46,15 +50,19 @@ h1 {
 }
 
 form {
-	label {
-		padding: 5px 0;
-		margin-bottom: 10px;
-		display: block;
-	}
-
-	.asInput({
-		margin-bottom: 10px;
+	.asMobile({
+		font-size: 18px;
 	});
+
+label {
+	padding: 5px 0;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.asInput({
+	margin-bottom: 10px;
+});
 
 .asError({
 	margin-bottom: 10px;
